@@ -16,7 +16,7 @@ includelib msvcrt.lib
 
 .DATA
 AppName db "Hello MASM", 0
-vertices real4 -0.3, -0.3, 0.0, 0.3f, 0.3f, -0.3f
+vertices real4 -0.3, -0.3, 0.0, 0.3, 0.3, -0.3
 aa dword 16 dup(20h)
 
 vertexShader db\
@@ -110,7 +110,7 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 		invoke poll_events, window
 
 		invoke should_close, window
-   .endw 
+	.endw 
 
 	invoke destroy_shader, shader
 	invoke destroy_window, window
