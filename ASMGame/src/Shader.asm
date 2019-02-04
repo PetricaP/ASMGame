@@ -9,10 +9,10 @@ SHADER struct
 	rendererID dword 0
 SHADER ends
 
-compile_shader proto shaderSource:dword, shaderType:dword
+compileShader proto shaderSource:dword, shaderType:dword
 
 .code
-compile_shader proc uses ebx edi shaderSource:dword, shaderType:dword
+compileShader proc uses ebx edi shaderSource:dword, shaderType:dword
 	local result:dword
 	local loglen:dword
 
@@ -65,9 +65,9 @@ compile_shader proc uses ebx edi shaderSource:dword, shaderType:dword
 	mov eax, ebx
 
 	ret
-compile_shader endp
+compileShader endp
 
-create_shader proc uses ebx edi esi vertexShaderSource:dword, fragmentShaderSource:dword
+createShader proc uses ebx edi esi vertexShaderSource:dword, fragmentShaderSource:dword
 	call glCreateProgram
 	mov ebx, eax
 	call glGetError
@@ -77,10 +77,10 @@ create_shader proc uses ebx edi esi vertexShaderSource:dword, fragmentShaderSour
 	call glGetError
 
 	push ebx
-	invoke compile_shader, vertexShaderSource, GL_VERTEX_SHADER
+	invoke compileShader, vertexShaderSource, GL_VERTEX_SHADER
 	push eax
 
-	invoke compile_shader, fragmentShaderSource, GL_FRAGMENT_SHADER
+	invoke compileShader, fragmentShaderSource, GL_FRAGMENT_SHADER
 	mov esi, eax
 	pop edi
 	pop ebx
@@ -118,9 +118,9 @@ create_shader proc uses ebx edi esi vertexShaderSource:dword, fragmentShaderSour
 	mov [eax].SHADER.rendererID, ebx
 
 	ret
-create_shader endp
+createShader endp
 
-destroy_shader proc uses ebx shader_handle:ISHADER
+destroyShader proc uses ebx shader_handle:IShader
 	mov ebx, shader_handle
 	push [ebx].SHADER.rendererID
 	call glDeleteProgram
@@ -128,15 +128,15 @@ destroy_shader proc uses ebx shader_handle:ISHADER
 	push ebx
 	call crt_free
 	ret
-destroy_shader endp
+destroyShader endp
 
-use_shader proc shader_handle:ISHADER
+bindShader proc shader_handle:IShader
 	mov eax, shader_handle
 	mov ecx, [eax].SHADER.rendererID
 	push ecx
 	call glUseProgram
 	ret
-use_shader endp
+bindShader endp
 
 end
 

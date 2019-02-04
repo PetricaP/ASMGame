@@ -21,14 +21,9 @@ Window ends
 .data
 ClassName db "SimpleWinClass", 0
 
-r real4 0.6f
-g real4 0.3f
-b real4 0.2f
-a real4 1.0f
-
 .code
 
-create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
+createWindow proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 	local wc:WNDCLASSEX											
 	local hwnd:HWND
 	local dc:HDC
@@ -113,8 +108,6 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 
 	invoke wglMakeCurrent, dc, rdc
 
-	invoke glClearColor, r, g, b, a
-
 	push dword ptr sizeof(Window)
 	call crt_malloc
 	add esp, 4
@@ -127,16 +120,16 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 	mov [eax].Window.ShouldClose, 0
 
 	ret
-create_window endp
+createWindow endp
 
-swap_buffers proc windowIn:dword
+swapBuffers proc windowIn:dword
 	mov ebx, windowIn
 	mov ebx, [ebx].Window.hdc
 	invoke SwapBuffers, ebx
 	ret
-swap_buffers endp
+swapBuffers endp
 
-destroy_window proc windowIn:dword
+destroyWindow proc windowIn:dword
 	mov ebx, windowIn
 	invoke wglMakeCurrent, NULL, [ebx].Window.rdc
 	invoke wglDeleteContext, [ebx].Window.rdc
@@ -145,7 +138,7 @@ destroy_window proc windowIn:dword
 	call crt_free
 	add esp, 4
 	ret
-destroy_window endp
+destroyWindow endp
 
 WndProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM 
 	.IF uMsg==WM_DESTROY						   
@@ -158,7 +151,7 @@ WndProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 	ret 
 WndProc endp
 
-poll_events proc windowIn:dword
+pollEvents proc windowIn:dword
 	local msg:MSG 
 
 	mov ebx, windowIn
@@ -171,14 +164,14 @@ poll_events proc windowIn:dword
 	invoke TranslateMessage, addr msg 
 	invoke DispatchMessage, addr msg 
 	ret
-poll_events endp
+pollEvents endp
 
-should_close proc windowIn:dword
+shouldClose proc windowIn:dword
 	mov ebx, windowIn
 	xor eax, eax
 	mov al, [ebx].Window.ShouldClose
 	ret
-should_close endp
+shouldClose endp
 
 end
 

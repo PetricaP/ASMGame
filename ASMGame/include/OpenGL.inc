@@ -7,8 +7,8 @@ GL_VERTEX_SHADER equ 8B31h
 GL_COMPILE_STATUS equ 8B81h
 GL_INFO_LOG_LENGTH equ 8B84h
 
-init_gl proto
-handle_gl_error proto code:dword
+initGL proto
+handleGLError proto code:dword
 
 extern glGenBuffers:dword
 extern glBindBuffer:dword
@@ -38,3 +38,4 @@ GLCALL macro X
 		; An error occured
 	.endif
 endm
+

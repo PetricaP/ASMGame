@@ -71,34 +71,34 @@ glUseProgram dword 0
 glDeleteProgram dword 0
 glDeleteBuffers dword 0
 
-load_function proto funcname:dword, funcptr:dword
+loadGLFunction proto funcname:dword, funcptr:dword
 
 .code
-init_gl proc
-	invoke load_function, addr glGenBuffersStr, offset glGenBuffers
-	invoke load_function, addr glBindBufferStr, offset glBindBuffer
-	invoke load_function, addr glBufferDataStr, offset glBufferData
-	invoke load_function, addr glBindVertexArrayStr, offset glBindVertexArray
-	invoke load_function, addr glGenVertexArraysStr, offset glGenVertexArrays
-	invoke load_function, addr glEnableVertexAttribArrayStr, offset glEnableVertexAttribArray
-	invoke load_function, addr glVertexAttribPointerStr, offset glVertexAttribPointer
-	invoke load_function, addr glCreateProgramStr, offset glCreateProgram
-	invoke load_function, addr glCreateShaderStr, offset glCreateShader
-	invoke load_function, addr glShaderSourceStr, offset glShaderSource
-	invoke load_function, addr glCompileShaderStr, offset glCompileShader
-	invoke load_function, addr glAttachShaderStr, offset glAttachShader
-	invoke load_function, addr glLinkProgramStr, offset glLinkProgram
-	invoke load_function, addr glValidateProgramStr, offset glValidateProgram
-	invoke load_function, addr glDeleteShaderStr, offset glDeleteShader
-	invoke load_function, addr glGetShaderivStr, offset glGetShaderiv
-	invoke load_function, addr glGetShaderInfoLogStr, offset glGetShaderInfoLog
-	invoke load_function, addr glUseProgramStr, offset glUseProgram
-	invoke load_function, addr glDeleteProgramStr, offset glDeleteProgram
-	invoke load_function, addr glDeleteBuffersStr, offset glDeleteBuffers
+initGL proc
+	invoke loadGLFunction, addr glGenBuffersStr, offset glGenBuffers
+	invoke loadGLFunction, addr glBindBufferStr, offset glBindBuffer
+	invoke loadGLFunction, addr glBufferDataStr, offset glBufferData
+	invoke loadGLFunction, addr glBindVertexArrayStr, offset glBindVertexArray
+	invoke loadGLFunction, addr glGenVertexArraysStr, offset glGenVertexArrays
+	invoke loadGLFunction, addr glEnableVertexAttribArrayStr, offset glEnableVertexAttribArray
+	invoke loadGLFunction, addr glVertexAttribPointerStr, offset glVertexAttribPointer
+	invoke loadGLFunction, addr glCreateProgramStr, offset glCreateProgram
+	invoke loadGLFunction, addr glCreateShaderStr, offset glCreateShader
+	invoke loadGLFunction, addr glShaderSourceStr, offset glShaderSource
+	invoke loadGLFunction, addr glCompileShaderStr, offset glCompileShader
+	invoke loadGLFunction, addr glAttachShaderStr, offset glAttachShader
+	invoke loadGLFunction, addr glLinkProgramStr, offset glLinkProgram
+	invoke loadGLFunction, addr glValidateProgramStr, offset glValidateProgram
+	invoke loadGLFunction, addr glDeleteShaderStr, offset glDeleteShader
+	invoke loadGLFunction, addr glGetShaderivStr, offset glGetShaderiv
+	invoke loadGLFunction, addr glGetShaderInfoLogStr, offset glGetShaderInfoLog
+	invoke loadGLFunction, addr glUseProgramStr, offset glUseProgram
+	invoke loadGLFunction, addr glDeleteProgramStr, offset glDeleteProgram
+	invoke loadGLFunction, addr glDeleteBuffersStr, offset glDeleteBuffers
 	ret
-init_gl endp
+initGL endp
 
-load_function proc funcname:dword, funcptr:dword
+loadGLFunction proc funcname:dword, funcptr:dword
 	invoke wglGetProcAddress, funcname
 	mov ebx, funcptr
 	.if eax != 0
@@ -110,7 +110,7 @@ load_function proc funcname:dword, funcptr:dword
 		mov [ebx], eax
 	.endif
 	ret
-load_function endp
+loadGLFunction endp
 
 end
 

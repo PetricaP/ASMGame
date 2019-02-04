@@ -9,27 +9,39 @@ include VertexBuffer.inc
 include kernel32.inc 
 include msvcrt.inc 
 
-.DATA
+.data
 AppName db "Hello MASM", 0
-vertices real4 -0.3, -0.3, 0.0, 0.3, 0.3, -0.3
+vertices real4 -0.3, -0.3, 0.7f, 0.2f, 0.1f,\
+				0.0,  0.3, 0.8f, 0.3f, 0.2f,\
+				0.3, -0.3, 0.6f, 0.1f, 0.3f
+r real4 0.1f
+g real4 0.3f
+b real4 0.2f
+a real4 1.0f
 
-vertexShader db\
+vsSource db\
 "#version 330 core", 10,\
 10,\
-"layout(location = 0) in vec4 position;", 10,\
+"layout(location = 0) in vec2 position;", 10,\
+"layout(location = 1) in vec3 color;", 10,\
+10,\
+"out vec3 v_color;", 10,\
 10,\
 "void main() {", 10,\
-"	gl_Position = position;", 10,\
+"	gl_Position = vec4(position, 0.0f, 1.0f);", 10,\
+"	v_color = color;", 10,\
 "}", 10,
 10, 0
 
-fragmentShader db\
+fsSource db\
 "#version 330 core", 10,\
+10,\
+"in vec3 v_color;", 10,\
 10,\
 "out vec4 color;", 10,\
 10,\
 "void main() {", 10,\
-"	color = vec4(0.2f, 0.0f, 0.5f, 1.0f);", 10,\
+"	color = vec4(v_color, 1.0f);", 10,\
 "}", 10,\
 10, 0
 
@@ -39,16 +51,16 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	local window:IWindow
 	local vbo:IVertexBuffer
 	local vao:dword
-	local shader:ISHADER
+	local shader:IShader
 
 	;invoke AllocConsole
 	;invoke GetCurrentProcessId
 	;invoke AttachConsole, eax
 
-	invoke create_window, addr AppName, 640, 480
+	invoke createWindow, addr AppName, 640, 480
 	mov window, eax
 
-	invoke init_gl
+	invoke initGL
 
 	lea eax, vao
 	push eax
@@ -65,21 +77,34 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	GLCALL(glEnableVertexAttribArray)
 
 	push dword ptr 0
-	push dword ptr 8
+	push dword ptr 20
 	push dword ptr 0
 	push dword ptr GL_FLOAT
 	push dword ptr 2
 	push dword ptr 0
 	GLCALL(glVertexAttribPointer)
 
-	invoke create_shader, addr vertexShader, addr fragmentShader
+	push dword ptr 1
+	GLCALL(glEnableVertexAttribArray)
+
+	push dword ptr 8
+	push dword ptr 20
+	push dword ptr 0
+	push dword ptr GL_FLOAT
+	push dword ptr 3
+	push dword ptr 1
+	GLCALL(glVertexAttribPointer)
+
+	invoke createShader, addr vsSource, addr fsSource
 	mov shader, eax
 
-	invoke use_shader, shader
+	invoke bindShader, eax
+
+	invoke glClearColor, r, g, b, a
 
 	xor eax, eax
 	.while eax == 0
-		invoke swap_buffers, window
+		invoke swapBuffers, window
 
 		invoke glClear, GL_COLOR_BUFFER_BIT
 
@@ -88,13 +113,14 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 		push dword ptr GL_TRIANGLES
 		call glDrawArrays
 
-		invoke poll_events, window
+		invoke pollEvents, window
 
-		invoke should_close, window
+		invoke shouldClose, window
 	.endw 
 
-	invoke destroy_shader, shader
-	invoke destroy_window, window
+	invoke destroyVertexBuffer, vbo
+	invoke destroyShader, shader
+	invoke destroyWindow, window
 
 	xor eax, eax
 	invoke ExitProcess, 0

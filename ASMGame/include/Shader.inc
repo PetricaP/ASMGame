@@ -1,6 +1,6 @@
 
-ISHADER textequ <dword>
+IShader textequ <dword>
 
-create_shader proto vertexShaderSource:dword, fragmanetShaderSource:dword
-use_shader proto shader_handle:ISHADER
-destroy_shader proto shader_handle:ISHADER
+createShader proto vertexShaderSource:dword, fragmanetShaderSource:dword
+bindShader proto shader_handle:IShader
+destroyShader proto shader_handle:IShader
