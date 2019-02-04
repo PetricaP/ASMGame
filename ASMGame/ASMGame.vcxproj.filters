@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="Main.asm">
+    <MASM Include="src\Main.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Window.asm">
+    <MASM Include="src\Window.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="OpenGL.asm">
+    <MASM Include="src\Shader.asm">
       <Filter>Source Files</Filter>
     </MASM>
-    <MASM Include="Shader.asm">
+    <MASM Include="src\OpenGL.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Window.inc">
+    <None Include="include\Window.inc">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="OpenGL.inc">
+    <None Include="include\Shader.inc">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="Shader.inc">
+    <None Include="include\OpenGL.inc">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
