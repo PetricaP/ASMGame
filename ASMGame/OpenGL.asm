@@ -1,4 +1,4 @@
-include OpenGL.inc
+.model flat,stdcall 
 
 include opengl32.inc
 includelib opengl32.lib
@@ -26,61 +26,47 @@ glDeleteShaderStr db "glDeleteShader", 0
 glGetShaderivStr db "glGetShaderiv", 0
 glGetShaderInfoLogStr db "glGetShaderInfoLog", 0
 glUseProgramStr db "glUseProgram", 0
+glDeleteProgramStr db "glDeleteProgram", 0
 
-.data
 public glGenBuffers
-glGenBuffers dword 0
-
 public glBindBuffer
-glBindBuffer dword 0
-
 public glBufferData
-glBufferData dword 0
-
 public glGenVertexArrays
-glGenVertexArrays dword 0
-
 public glBindVertexArray
-glBindVertexArray dword 0
-
 public glEnableVertexAttribArray
-glEnableVertexAttribArray dword 0
-
 public glVertexAttribPointer
-glVertexAttribPointer dword 0
-
 public glCreateProgram
-glCreateProgram dword 0
-
 public glCreateShader
-glCreateShader dword 0
-
 public glShaderSource
-glShaderSource dword 0
-
 public glCompileShader
-glCompileShader dword 0
-
 public glAttachShader
-glAttachShader dword 0
-
 public glLinkProgram
-glLinkProgram dword 0
-
 public glValidateProgram
-glValidateProgram dword 0
-
 public glDeleteShader
-glDeleteShader dword 0
-
 public glGetShaderiv
-glGetShaderiv dword 0
-
 public glGetShaderInfoLog
-glGetShaderInfoLog dword 0
-
 public glUseProgram
+public glDeleteProgram
+
+glBindBuffer dword 0
+glGenBuffers dword 0
+glBufferData dword 0
+glGenVertexArrays dword 0
+glBindVertexArray dword 0
+glEnableVertexAttribArray dword 0
+glVertexAttribPointer dword 0
+glCreateProgram dword 0
+glCreateShader dword 0
+glShaderSource dword 0
+glCompileShader dword 0
+glAttachShader dword 0
+glLinkProgram dword 0
+glValidateProgram dword 0
+glDeleteShader dword 0
+glGetShaderiv dword 0
+glGetShaderInfoLog dword 0
 glUseProgram dword 0
+glDeleteProgram dword 0
 
 load_function proto funcname:dword, funcptr:dword
 
@@ -104,6 +90,7 @@ init_gl proc
 	invoke load_function, addr glGetShaderivStr, offset glGetShaderiv
 	invoke load_function, addr glGetShaderInfoLogStr, offset glGetShaderInfoLog
 	invoke load_function, addr glUseProgramStr, offset glUseProgram
+	invoke load_function, addr glDeleteProgramStr, offset glDeleteProgram
 	ret
 init_gl endp
 
@@ -122,3 +109,4 @@ load_function proc funcname:dword, funcptr:dword
 load_function endp
 
 end
+

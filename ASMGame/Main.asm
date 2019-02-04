@@ -2,23 +2,22 @@
 option casemap:none 
 
 include Window.inc
+include OpenGL.inc
+include Shader.inc
 
 include opengl32.inc
 includelib opengl32.lib
 
-include OpenGL.inc
-
 include kernel32.inc 
 includelib kernel32.lib
 
-create_shader proto vertexShaderSource:dword, fragmanetShaderSource:dword
+include msvcrt.inc 
+includelib msvcrt.lib
 
 .DATA
 AppName db "Hello MASM", 0
 vertices real4 -0.3, -0.3, 0.0, 0.3f, 0.3f, -0.3f
 aa dword 16 dup(20h)
-vbo dword 0
-vao dword 0
 
 vertexShader db\
 "#version 330 core", 10,\
@@ -40,65 +39,49 @@ fragmentShader db\
 "}", 10,\
 10, 0
 
-extern glGenBuffers:dword
-extern glBindBuffer:dword
-extern glBufferData:dword
-extern glGenVertexArrays:dword
-extern glBindVertexArray:dword
-extern glEnableVertexAttribArray:dword
-extern glVertexAttribPointer:dword
-extern glCreateProgram:dword
-extern glCreateShader:dword
-extern glShaderSource:dword
-extern glCompileShader:dword
-extern glAttachShader:dword
-extern glLinkProgram:dword
-extern glValidateProgram:dword
-extern glDeleteShader:dword
-extern glGetShaderiv:dword
-extern glGetShaderInfoLog:dword
-extern glUseProgram:dword
-
-.CODE
+.code
 start:
 WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD 
-	LOCAL window:WINDOWPTR
+	LOCAL window:IWINDOW
+	LOCAL vbo:dword
+	LOCAL vao:dword
+	LOCAL shader:ISHADER
+
+	;invoke AllocConsole
+	;invoke GetCurrentProcessId
+	;invoke AttachConsole, eax
 
 	invoke create_window, addr AppName, 640, 480
 	mov window, eax
 
 	invoke init_gl
 
-	push offset vao
+	lea eax, vao
+	push eax
 	push dword ptr 1
-	call glGenVertexArrays
-	invoke glGetError
+	GLCALL(glGenVertexArrays)
 
 	push vao
-	call glBindVertexArray
-	invoke glGetError
+	GLCALL(glBindVertexArray)
 
-	push offset vbo
+	lea eax, vbo
+	push eax
 	push dword ptr 1
 	mov eax, glGenBuffers
-	call glGenBuffers
-	invoke glGetError
+	GLCALL(glGenBuffers)
 
 	push vbo
 	push dword ptr GL_ARRAY_BUFFER
-	call glBindBuffer
-	invoke glGetError
+	GLCALL(glBindBuffer)
 
 	push dword ptr GL_STATIC_DRAW
 	push offset vertices
 	push dword ptr SIZEOF vertices
 	push dword ptr GL_ARRAY_BUFFER
-	call glBufferData
-	invoke glGetError
+	GLCALL(glBufferData)
 
 	push dword ptr 0
-	call glEnableVertexAttribArray
-	invoke glGetError
+	GLCALL(glEnableVertexAttribArray)
 
 	push dword ptr 0
 	push dword ptr 8
@@ -106,16 +89,12 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	push dword ptr GL_FLOAT
 	push dword ptr 2
 	push dword ptr 0
-	call glVertexAttribPointer
-	invoke glGetError
+	GLCALL(glVertexAttribPointer)
 
-	push offset fragmentShader
-	push offset vertexShader
-	call create_shader	
+	invoke create_shader, addr vertexShader, addr fragmentShader
+	mov shader, eax
 
-	push eax
-	call glUseProgram
-	invoke glGetError
+	invoke use_shader, shader
 
 	xor eax, eax
     .while eax == 0
@@ -133,7 +112,9 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 		invoke should_close, window
    .endw 
 
+	invoke destroy_shader, shader
     invoke destroy_window, window
+
     xor eax, eax
 	invoke ExitProcess, 0
     ret 

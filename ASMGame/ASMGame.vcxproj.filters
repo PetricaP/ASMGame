@@ -35,5 +35,8 @@
     <None Include="OpenGL.inc">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Shader.inc">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

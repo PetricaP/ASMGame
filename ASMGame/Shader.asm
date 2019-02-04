@@ -1,38 +1,21 @@
+.model flat,stdcall 
+
 include OpenGL.inc
+include Shader.inc
 
 include opengl32.inc
+include msvcrt.inc
+
+SHADER struct
+	rendererID dword 0
+SHADER ends
 
 compile_shader proto shaderSource:dword, shaderType:dword
 
-.data
-
-extern glGenBuffers:dword
-extern glBindBuffer:dword
-extern glBufferData:dword
-extern glGenVertexArrays:dword
-extern glBindVertexArray:dword
-extern glEnableVertexAttribArray:dword
-extern glVertexAttribPointer:dword
-extern glCreateProgram:dword
-extern glCreateShader:dword
-extern glShaderSource:dword
-extern glCompileShader:dword
-extern glAttachShader:dword
-extern glLinkProgram:dword
-extern glValidateProgram:dword
-extern glDeleteShader:dword
-extern glGetShaderiv:dword
-extern glGetShaderInfoLog:dword
-extern glUseProgram:dword
-
 .code
-compile_shader proc shaderSource:dword, shaderType:dword
+compile_shader proc uses ebx edi shaderSource:dword, shaderType:dword
 	LOCAL result:dword
 	LOCAL loglen:dword
-
-	push ebx
-	push esi
-	push edi
 
 	push shaderSource
 	push shaderType
@@ -82,10 +65,6 @@ compile_shader proc shaderSource:dword, shaderType:dword
 
 	mov eax, ebx
 
-	pop edi
-	pop esi
-	pop ebx
-
 	ret
 compile_shader endp
 
@@ -133,9 +112,32 @@ create_shader proc uses ebx edi esi vertexShaderSource:dword, fragmentShaderSour
 	call glDeleteShader
 	call glGetError
 
-	mov eax, ebx
+	push dword ptr SIZEOF SHADER
+	call crt_malloc
+	add esp, 4
+
+	mov [eax].SHADER.rendererID, ebx
+
 	ret
 create_shader endp
+
+destroy_shader proc uses ebx shader_handle:ISHADER
+	mov ebx, shader_handle
+	push [ebx].SHADER.rendererID
+	call glDeleteProgram
+	
+	push ebx
+	call crt_free
+	ret
+destroy_shader endp
+
+use_shader proc shader_handle:ISHADER
+	mov eax, shader_handle
+	mov ecx, [eax].SHADER.rendererID
+	push ecx
+	call glUseProgram
+	ret
+use_shader endp
 
 end
 
