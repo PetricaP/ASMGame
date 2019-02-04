@@ -27,6 +27,7 @@ glGetShaderivStr db "glGetShaderiv", 0
 glGetShaderInfoLogStr db "glGetShaderInfoLog", 0
 glUseProgramStr db "glUseProgram", 0
 glDeleteProgramStr db "glDeleteProgram", 0
+glDeleteBuffersStr db "glDeleteBuffers", 0
 
 public glGenBuffers
 public glBindBuffer
@@ -47,6 +48,7 @@ public glGetShaderiv
 public glGetShaderInfoLog
 public glUseProgram
 public glDeleteProgram
+public glDeleteBuffers
 
 glBindBuffer dword 0
 glGenBuffers dword 0
@@ -67,6 +69,7 @@ glGetShaderiv dword 0
 glGetShaderInfoLog dword 0
 glUseProgram dword 0
 glDeleteProgram dword 0
+glDeleteBuffers dword 0
 
 load_function proto funcname:dword, funcptr:dword
 
@@ -91,6 +94,7 @@ init_gl proc
 	invoke load_function, addr glGetShaderInfoLogStr, offset glGetShaderInfoLog
 	invoke load_function, addr glUseProgramStr, offset glUseProgram
 	invoke load_function, addr glDeleteProgramStr, offset glDeleteProgram
+	invoke load_function, addr glDeleteBuffersStr, offset glDeleteBuffers
 	ret
 init_gl endp
 

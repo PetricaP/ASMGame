@@ -132,11 +132,13 @@
     <MASM Include="src\Main.asm" />
     <MASM Include="src\OpenGL.asm" />
     <MASM Include="src\Shader.asm" />
+    <MASM Include="src\VertexBuffer.asm" />
     <MASM Include="src\Window.asm" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\OpenGL.inc" />
     <None Include="include\Shader.inc" />
+    <None Include="include\VertexBuffer.inc" />
     <None Include="include\Window.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

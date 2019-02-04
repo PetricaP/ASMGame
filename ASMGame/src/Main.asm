@@ -4,8 +4,8 @@ option casemap:none
 include Window.inc
 include OpenGL.inc
 include Shader.inc
+include VertexBuffer.inc
 
-include opengl32.inc
 include kernel32.inc 
 include msvcrt.inc 
 
@@ -36,8 +36,8 @@ fragmentShader db\
 .code
 start:
 WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD 
-	local window:IWINDOW
-	local vbo:dword
+	local window:IWindow
+	local vbo:IVertexBuffer
 	local vao:dword
 	local shader:ISHADER
 
@@ -58,21 +58,8 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	push vao
 	GLCALL(glBindVertexArray)
 
-	lea eax, vbo
-	push eax
-	push dword ptr 1
-	mov eax, glGenBuffers
-	GLCALL(glGenBuffers)
-
-	push vbo
-	push dword ptr GL_ARRAY_BUFFER
-	GLCALL(glBindBuffer)
-
-	push dword ptr GL_STATIC_DRAW
-	push offset vertices
-	push dword ptr SIZEOF vertices
-	push dword ptr GL_ARRAY_BUFFER
-	GLCALL(glBufferData)
+	invoke createVertexBuffer, addr vertices, SIZEOF vertices, GL_STATIC_DRAW
+	mov vbo, eax
 
 	push dword ptr 0
 	GLCALL(glEnableVertexAttribArray)

@@ -1,9 +1,9 @@
 include windows.inc
 
-IWINDOW textequ <dword>
+IWindow textequ <dword>
 
 create_window proto titleIn:LPCSTR, widthIn:dword, heightIn:dword
-destroy_window proto windowIn:IWINDOW
-swap_buffers proto windowIn:IWINDOW
-poll_events proto windowIn:IWINDOW
-should_close proto windowIn:IWINDOW
+destroy_window proto windowIn:IWindow
+swap_buffers proto windowIn:IWindow
+poll_events proto windowIn:IWindow
+should_close proto windowIn:IWindow

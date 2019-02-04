@@ -27,6 +27,9 @@
     <MASM Include="src\OpenGL.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="src\VertexBuffer.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Window.inc">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="include\OpenGL.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\VertexBuffer.inc">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

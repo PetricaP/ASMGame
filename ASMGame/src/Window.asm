@@ -11,12 +11,12 @@ include kernel32.inc
 
 HGLRC textequ <dword>
 
-WINDOW struct
+Window struct
 	hwnd HWND 0
 	hdc HDC 0
 	rdc HGLRC 0
 	ShouldClose byte 0
-WINDOW ends
+Window ends
 
 .data
 ClassName db "SimpleWinClass", 0
@@ -37,18 +37,18 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 
 	mov   wc.cbSize,SIZEOF WNDCLASSEX				   
 	mov   wc.style, CS_HREDRAW or CS_VREDRAW 
-	mov   wc.lpfnWndProc, OFFSET WndProc 
-	mov   wc.cbClsExtra,NULL 
-	mov   wc.cbWndExtra,NULL 
+	mov   wc.lpfnWndProc, offset WndProc 
+	mov   wc.cbClsExtra, NULL 
+	mov   wc.cbWndExtra, NULL 
 	mov   wc.hInstance, NULL
-	mov   wc.hbrBackground,COLOR_WINDOW+1
-	mov   wc.lpszMenuName,NULL 
-	mov   wc.lpszClassName,OFFSET ClassName 
-	invoke LoadIcon,NULL,IDI_APPLICATION 
-	mov   wc.hIcon,eax 
-	mov   wc.hIconSm,eax 
+	mov   wc.hbrBackground, COLOR_WINDOW + 1
+	mov   wc.lpszMenuName, NULL 
+	mov   wc.lpszClassName, offset ClassName 
+	invoke LoadIcon, NULL, IDI_APPLICATION 
+	mov   wc.hIcon, eax 
+	mov   wc.hIconSm, eax 
 	invoke LoadCursor,NULL,IDC_ARROW 
-	mov   wc.hCursor,eax 
+	mov   wc.hCursor, eax 
 	invoke RegisterClassEx, addr wc					   
 	invoke CreateWindowEx,
 		NULL,\ 
@@ -115,32 +115,32 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 
 	invoke glClearColor, r, g, b, a
 
-	push dword ptr sizeof(WINDOW)
+	push dword ptr sizeof(Window)
 	call crt_malloc
 	add esp, 4
 	mov ebx, hwnd
-	mov [eax].WINDOW.hwnd, ebx
+	mov [eax].Window.hwnd, ebx
 	mov ebx, dc
-	mov [eax].WINDOW.hdc, ebx
+	mov [eax].Window.hdc, ebx
 	mov ebx, rdc
-	mov [eax].WINDOW.rdc, ebx
-	mov [eax].WINDOW.ShouldClose, 0
+	mov [eax].Window.rdc, ebx
+	mov [eax].Window.ShouldClose, 0
 
 	ret
 create_window endp
 
 swap_buffers proc windowIn:dword
 	mov ebx, windowIn
-	mov ebx, [ebx].WINDOW.hdc
+	mov ebx, [ebx].Window.hdc
 	invoke SwapBuffers, ebx
 	ret
 swap_buffers endp
 
 destroy_window proc windowIn:dword
 	mov ebx, windowIn
-	invoke wglMakeCurrent, NULL, [ebx].WINDOW.rdc
-	invoke wglDeleteContext, [ebx].WINDOW.rdc
-	invoke DestroyWindow, [ebx].WINDOW.hwnd
+	invoke wglMakeCurrent, NULL, [ebx].Window.rdc
+	invoke wglDeleteContext, [ebx].Window.rdc
+	invoke DestroyWindow, [ebx].Window.hwnd
 	push windowIn
 	call crt_free
 	add esp, 4
@@ -163,10 +163,10 @@ poll_events proc windowIn:dword
 
 	mov ebx, windowIn
 	invoke GetMessage, addr msg,NULL,0,0 
-	mov cl, [ebx].WINDOW.ShouldClose
+	mov cl, [ebx].Window.ShouldClose
 	.if eax == 0
 		xor cl, 1
-		mov [ebx].WINDOW.ShouldClose, cl
+		mov [ebx].Window.ShouldClose, cl
 	.endif
 	invoke TranslateMessage, addr msg 
 	invoke DispatchMessage, addr msg 
@@ -176,7 +176,7 @@ poll_events endp
 should_close proc windowIn:dword
 	mov ebx, windowIn
 	xor eax, eax
-	mov al, [ebx].WINDOW.ShouldClose
+	mov al, [ebx].Window.ShouldClose
 	ret
 should_close endp
 

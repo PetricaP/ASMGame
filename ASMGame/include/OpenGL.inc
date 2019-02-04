@@ -1,3 +1,4 @@
+include opengl32.inc
 
 GL_ARRAY_BUFFER equ 8892h
 GL_STATIC_DRAW equ 88E4h
@@ -28,6 +29,7 @@ extern glGetShaderiv:dword
 extern glGetShaderInfoLog:dword
 extern glUseProgram:dword
 extern glDeleteProgram:dword
+extern glDeleteBuffers:dword
 
 GLCALL macro X
 	call X

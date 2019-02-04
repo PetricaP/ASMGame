@@ -3,7 +3,6 @@
 include OpenGL.inc
 include Shader.inc
 
-include opengl32.inc
 include msvcrt.inc
 
 SHADER struct
