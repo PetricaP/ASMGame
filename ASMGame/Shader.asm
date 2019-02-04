@@ -14,8 +14,8 @@ compile_shader proto shaderSource:dword, shaderType:dword
 
 .code
 compile_shader proc uses ebx edi shaderSource:dword, shaderType:dword
-	LOCAL result:dword
-	LOCAL loglen:dword
+	local result:dword
+	local loglen:dword
 
 	push shaderSource
 	push shaderType

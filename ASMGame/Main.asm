@@ -6,18 +6,12 @@ include OpenGL.inc
 include Shader.inc
 
 include opengl32.inc
-includelib opengl32.lib
-
 include kernel32.inc 
-includelib kernel32.lib
-
 include msvcrt.inc 
-includelib msvcrt.lib
 
 .DATA
 AppName db "Hello MASM", 0
 vertices real4 -0.3, -0.3, 0.0, 0.3, 0.3, -0.3
-aa dword 16 dup(20h)
 
 vertexShader db\
 "#version 330 core", 10,\
@@ -42,10 +36,10 @@ fragmentShader db\
 .code
 start:
 WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD 
-	LOCAL window:IWINDOW
-	LOCAL vbo:dword
-	LOCAL vao:dword
-	LOCAL shader:ISHADER
+	local window:IWINDOW
+	local vbo:dword
+	local vao:dword
+	local shader:ISHADER
 
 	;invoke AllocConsole
 	;invoke GetCurrentProcessId

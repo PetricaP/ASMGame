@@ -4,18 +4,10 @@ option casemap:none
 include Window.inc
 
 include user32.inc 
-includelib user32.lib
-
 include gdi32.inc
-
 include msvcrt.inc
-includelib msvcrt.lib
-
 include opengl32.inc
-includelib opengl32.lib
-
 include kernel32.inc 
-includelib kernel32.lib
 
 HGLRC textequ <dword>
 
@@ -26,7 +18,7 @@ WINDOW struct
 	ShouldClose byte 0
 WINDOW ends
 
-.DATA
+.data
 ClassName db "SimpleWinClass", 0
 
 r real4 0.6f
@@ -37,13 +29,13 @@ a real4 1.0f
 .code
 
 create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
-	LOCAL wc:WNDCLASSEX											; create local variables on stack 
-	LOCAL hwnd:HWND
-	LOCAL dc:HDC
-	LOCAL pfd:PIXELFORMATDESCRIPTOR
-	LOCAL rdc:HGLRC
+	local wc:WNDCLASSEX											
+	local hwnd:HWND
+	local dc:HDC
+	local pfd:PIXELFORMATDESCRIPTOR
+	local rdc:HGLRC
 
-	mov   wc.cbSize,SIZEOF WNDCLASSEX				   ; fill values in members of wc 
+	mov   wc.cbSize,SIZEOF WNDCLASSEX				   
 	mov   wc.style, CS_HREDRAW or CS_VREDRAW 
 	mov   wc.lpfnWndProc, OFFSET WndProc 
 	mov   wc.cbClsExtra,NULL 
@@ -57,24 +49,26 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 	mov   wc.hIconSm,eax 
 	invoke LoadCursor,NULL,IDC_ARROW 
 	mov   wc.hCursor,eax 
-	invoke RegisterClassEx, addr wc					   ; register our window class 
-	invoke CreateWindowEx, NULL,\ 
-				ADDR ClassName,\ 
-				titleIn,\ 
-				WS_OVERLAPPEDWINDOW,\ 
-				CW_USEDEFAULT,\ 
-				CW_USEDEFAULT,\ 
-				widthIn,\ 
-				heightIn,\ 
-				NULL,\ 
-				NULL,\ 
-				NULL,\ 
-				NULL 
-	mov hwnd,eax 
-	invoke ShowWindow, hwnd, 1			   ; display our window on desktop 
-	invoke UpdateWindow, hwnd								 ; refresh the client area
+	invoke RegisterClassEx, addr wc					   
+	invoke CreateWindowEx,
+		NULL,\ 
+		addr ClassName,\ 
+		titleIn,\ 
+		WS_OVERLAPPEDWINDOW,\ 
+		CW_USEDEFAULT,\ 
+		CW_USEDEFAULT,\ 
+		widthIn,\ 
+		heightIn,\ 
+		NULL,\ 
+		NULL,\ 
+		NULL,\ 
+		NULL 
 
-	; Initialize opengl context
+	mov hwnd,eax 
+
+	invoke ShowWindow, hwnd, 1			   
+	invoke UpdateWindow, hwnd								 
+
 	invoke GetDC, hwnd
 	mov dc, eax
 
@@ -111,7 +105,7 @@ create_window proc titleIn:LPCSTR, widthIn:dword, heightIn:dword
 
 	invoke ChoosePixelFormat, dc, addr pfd
 
-	mov ebx, eax ; Pixel format number
+	mov ebx, eax 
 	invoke SetPixelFormat, dc, ebx, addr pfd
 
 	invoke wglCreateContext, dc
@@ -154,10 +148,10 @@ destroy_window proc windowIn:dword
 destroy_window endp
 
 WndProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM 
-	.IF uMsg==WM_DESTROY						   ; if the user closes our window 
-		invoke PostQuitMessage,NULL			 ; quit our application 
+	.IF uMsg==WM_DESTROY						   
+		invoke PostQuitMessage,NULL			 
 	.ELSE 
-		invoke DefWindowProc,hWnd,uMsg,wParam,lParam	 ; Default message processing 
+		invoke DefWindowProc,hWnd,uMsg,wParam,lParam	 
 		ret 
 	.ENDIF 
 	xor eax,eax 
@@ -165,17 +159,17 @@ WndProc proc hWnd:HWND, uMsg:UINT, wParam:WPARAM, lParam:LPARAM
 WndProc endp
 
 poll_events proc windowIn:dword
-	LOCAL msg:MSG 
+	local msg:MSG 
 
 	mov ebx, windowIn
-	invoke GetMessage, ADDR msg,NULL,0,0 
+	invoke GetMessage, addr msg,NULL,0,0 
 	mov cl, [ebx].WINDOW.ShouldClose
 	.if eax == 0
 		xor cl, 1
 		mov [ebx].WINDOW.ShouldClose, cl
 	.endif
-	invoke TranslateMessage, ADDR msg 
-	invoke DispatchMessage, ADDR msg 
+	invoke TranslateMessage, addr msg 
+	invoke DispatchMessage, addr msg 
 	ret
 poll_events endp
 
