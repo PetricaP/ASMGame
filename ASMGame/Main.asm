@@ -113,7 +113,7 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
    .endw 
 
 	invoke destroy_shader, shader
-    invoke destroy_window, window
+	invoke destroy_window, window
 
     xor eax, eax
 	invoke ExitProcess, 0
