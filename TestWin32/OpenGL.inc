@@ -1,0 +1,11 @@
+.model flat,stdcall 
+
+GL_ARRAY_BUFFER equ 8892h
+GL_STATIC_DRAW equ 88E4h
+GL_FRAGMENT_SHADER equ 8B30h
+GL_VERTEX_SHADER equ 8B31h
+GL_COMPILE_STATUS equ 8B81h
+GL_INFO_LOG_LENGTH equ 8B84h
+
+init_gl proto
+
