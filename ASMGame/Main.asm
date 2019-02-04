@@ -97,7 +97,7 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	invoke use_shader, shader
 
 	xor eax, eax
-    .while eax == 0
+	.while eax == 0
 		invoke swap_buffers, window
 
 		invoke glClear, GL_COLOR_BUFFER_BIT
@@ -115,9 +115,9 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	invoke destroy_shader, shader
 	invoke destroy_window, window
 
-    xor eax, eax
+	xor eax, eax
 	invoke ExitProcess, 0
-    ret 
+	ret 
 WinMain endp
 
 end start
