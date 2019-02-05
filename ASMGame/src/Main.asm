@@ -5,6 +5,7 @@ include Window.inc
 include OpenGL.inc
 include Shader.inc
 include VertexBuffer.inc
+include InputLayout.inc
 
 include kernel32.inc 
 include msvcrt.inc 
@@ -48,14 +49,11 @@ fsSource db\
 .code
 start:
 WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD 
-	local window:IWindow
-	local vbo:IVertexBuffer
-	local vao:dword
-	local shader:IShader
-
-	;invoke AllocConsole
-	;invoke GetCurrentProcessId
-	;invoke AttachConsole, eax
+	local window : IWindow
+	local vbo : IVertexBuffer
+	local vao : dword
+	local shader : IShader
+	local inputLayoutElements[2] : InputLayoutElement
 
 	invoke createWindow, addr AppName, 640, 480
 	mov window, eax
@@ -73,27 +71,15 @@ WinMain proc hInst:HINSTANCE,hPrevInst:HINSTANCE,CmdLine:LPSTR,CmdShow:DWORD
 	invoke createVertexBuffer, addr vertices, SIZEOF vertices, GL_STATIC_DRAW
 	mov vbo, eax
 
-	push dword ptr 0
-	GLCALL(glEnableVertexAttribArray)
+	lea eax, inputLayoutElements
+	mov [eax].InputLayoutElement.dataType, GL_FLOAT
+	mov [eax].InputLayoutElement.number, 2
 
-	push dword ptr 0
-	push dword ptr 20
-	push dword ptr 0
-	push dword ptr GL_FLOAT
-	push dword ptr 2
-	push dword ptr 0
-	GLCALL(glVertexAttribPointer)
+	add eax, SIZEOF InputLayoutElement
+	mov [eax].InputLayoutElement.dataType, GL_FLOAT
+	mov [eax].InputLayoutElement.number, 3
 
-	push dword ptr 1
-	GLCALL(glEnableVertexAttribArray)
-
-	push dword ptr 8
-	push dword ptr 20
-	push dword ptr 0
-	push dword ptr GL_FLOAT
-	push dword ptr 3
-	push dword ptr 1
-	GLCALL(glVertexAttribPointer)
+	invoke createInputLayout, 2, addr inputLayoutElements
 
 	invoke createShader, addr vsSource, addr fsSource
 	mov shader, eax

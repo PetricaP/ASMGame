@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);F:\pla\masm32\include;$(ProjectDir)include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);F:\pla\masm32\include;F:\pla\masm32\macros;$(ProjectDir)include;</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);F:\pla\masm32\include;$(ProjectDir)include;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);F:\pla\masm32\include;F:\pla\masm32\macros;$(ProjectDir)include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <MASM Include="src\InputLayout.asm" />
     <MASM Include="src\Main.asm" />
     <MASM Include="src\OpenGL.asm" />
     <MASM Include="src\Shader.asm" />
@@ -136,6 +137,7 @@
     <MASM Include="src\Window.asm" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\InputLayout.inc" />
     <None Include="include\OpenGL.inc" />
     <None Include="include\Shader.inc" />
     <None Include="include\VertexBuffer.inc" />

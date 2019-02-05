@@ -30,6 +30,9 @@
     <MASM Include="src\VertexBuffer.asm">
       <Filter>Source Files</Filter>
     </MASM>
+    <MASM Include="src\InputLayout.asm">
+      <Filter>Source Files</Filter>
+    </MASM>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\Window.inc">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="include\VertexBuffer.inc">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="include\InputLayout.inc">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
